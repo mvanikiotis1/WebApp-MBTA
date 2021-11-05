@@ -5,9 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Closest Station</title>
+
+    <script> 
+    function validation(){ 
+        if(document.getElementById("street").value != ""){
+            alert("Please fill out all required fields")
+            return false; 
+        }
+        if(document.getElementById("city").value != ""){
+            alert("Please fill out all required fields")
+            return false; 
+        }
+        if(document.getElementById("zipcode").value != ""){
+            alert("Please fill out all required fields")
+            return false; 
+        }
+        
+    }
+    </script>
 </head>
 <body>
-    <form>
+    <h2>
+        Closest MBTA Station Calculator
+    </h2>
+    <form method = "post" onsubmit = "return validation()">
         <p>Street Address:
             <input type = "text" name = "street" id = "street"> 
         </p>
@@ -18,6 +39,9 @@
         <p> 
             Zipcode: 
             <input type = "text" name = "zipcode" id = "zipcode">
+        </p>
+        <p>
+            <input type = "submit" name = "submit" value = "Submit"/>
         </p>
     </form>
 </body>
