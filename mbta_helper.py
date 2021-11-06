@@ -1,11 +1,20 @@
+from typing import Mapping
+import config
+import urllib.request
+import json
+import pprint
+
+
+
 # Useful URLs (you need to add the appropriate parameters for your requests)
 MAPQUEST_BASE_URL = "http://www.mapquestapi.com/geocoding/v1/address"
 MBTA_BASE_URL = "https://api-v3.mbta.com/stops"
 
-# Your API KEYS (you need to use your own keys - very long random characters)
-MAPQUEST_API_KEY = ""
-MBTA_API_KEY = ""
 
+# Your API KEYS (you need to use your own keys - very long random characters)
+MAPQUEST_API_KEY = config.MapQuest_consumer_key
+MBTA_API_KEY = config.MTBA_key
+MAPQUEST_URL = f'http://www.mapquestapi.com/geocoding/v1/address?key={MAPQUEST_API_KEY}&location=Boston,MA'
 
 # A little bit of scaffolding if you want to use it
 
@@ -14,7 +23,14 @@ def get_json(url):
     Given a properly formatted URL for a JSON web API request, return
     a Python JSON object containing the response to that request.
     """
-    pass
+    f = urllib.request.urlopen(url)
+    response_text = f.read().decode('utf-8')
+    response_data = json.loads(response_text)
+    return response_data
+
+# pprint.pprint(get_json(MAPQUEST_URL))
+# pprint.pprint(get_json(MBTA_BASE_URL))
+
 
 
 def get_lat_long(place_name):
@@ -24,7 +40,15 @@ def get_lat_long(place_name):
     See https://developer.mapquest.com/documentation/geocoding-api/address/get/
     for Mapquest Geocoding  API URL formatting requirements.
     """
-    pass
+    MAPQUEST_URL = f'http://www.mapquestapi.com/geocoding/v1/address?key={MAPQUEST_API_KEY}&location={place_name}'
+    MAPQUEST_INFO = get_json(MAPQUEST_URL)
+    # pprint.pprint(MAPQUEST_INFO)
+    LAT_LONG = MAPQUEST_INFO['results'][0]['locations'][0]['latLng']
+    LAT = LAT_LONG['lat']
+    LONG = LAT_LONG['lng']
+    return [LAT , LONG]
+
+# print(get_lat_long('Cambridge,MA'))
 
 
 def get_nearest_station(latitude, longitude):
@@ -34,18 +58,34 @@ def get_nearest_station(latitude, longitude):
     See https://api-v3.mbta.com/docs/swagger/index.html#/Stop/ApiWeb_StopController_index for URL
     formatting requirements for the 'GET /stops' API.
     """
-    pass
+    sorted_distance_url = f"https://api-v3.mbta.com/stops?api_key={MBTA_API_KEY}&sort=distance&filter%5Blatitude%5D={latitude}&filter%5Blongitude%5D={longitude}"
+    f = urllib.request.urlopen(sorted_distance_url)
+    response_text = f.read().decode('utf-8')
+    response_data = json.loads(response_text)
+    is_wheelchair = response_data['data'][0]['attributes']['wheelchair_boarding']
+    if is_wheelchair == 0:
+        wheelchair_accessible = 'No Wheelchair Information'
+    elif is_wheelchair == 1:
+        wheelchair_accessible = 'Wheelchair Accessible'
+    else:
+        wheelchair_accessible = 'Wheelchair Inaccessable'
+    return (response_data['data'][0]['attributes']['name'], wheelchair_accessible)
+
+
+# print(get_nearest_station(42.365248, -71.105015))
 
 
 def find_stop_near(place_name):
     """
     Given a place name or address, return the nearest MBTA stop and whether it is wheelchair accessible.
     """
-    pass
+    lat_long = get_lat_long(place_name)
+    return get_nearest_station(lat_long[0], lat_long[1])
 
+print(find_stop_near(''))
 
 def main():
-    """
+    """"
     You can test all the functions here
     """
     pass
