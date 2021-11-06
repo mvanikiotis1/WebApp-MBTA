@@ -28,10 +28,6 @@ def get_json(url):
     response_data = json.loads(response_text)
     return response_data
 
-# pprint.pprint(get_json(MAPQUEST_URL))
-# pprint.pprint(get_json(MBTA_BASE_URL))
-
-
 
 def get_lat_long(place_name):
     """
@@ -40,7 +36,8 @@ def get_lat_long(place_name):
     See https://developer.mapquest.com/documentation/geocoding-api/address/get/
     for Mapquest Geocoding  API URL formatting requirements.
     """
-    MAPQUEST_URL = f'http://www.mapquestapi.com/geocoding/v1/address?key={MAPQUEST_API_KEY}&location={place_name}'
+    # MAPQUEST_URL = f'http://www.mapquestapi.com/geocoding/v1/address?key={MAPQUEST_API_KEY}&location={place_name}'
+    MAPQUEST_URL = f'http://www.mapquestapi.com/geocoding/v1/address?&key={MAPQUEST_API_KEY}&location={place_name}'
     MAPQUEST_INFO = get_json(MAPQUEST_URL)
     # pprint.pprint(MAPQUEST_INFO)
     LAT_LONG = MAPQUEST_INFO['results'][0]['locations'][0]['latLng']
@@ -48,7 +45,7 @@ def get_lat_long(place_name):
     LONG = LAT_LONG['lng']
     return [LAT , LONG]
 
-# print(get_lat_long('Cambridge,MA'))
+
 
 
 def get_nearest_station(latitude, longitude):
@@ -72,9 +69,6 @@ def get_nearest_station(latitude, longitude):
     return (response_data['data'][0]['attributes']['name'], wheelchair_accessible)
 
 
-# print(get_nearest_station(42.365248, -71.105015))
-
-
 def find_stop_near(place_name):
     """
     Given a place name or address, return the nearest MBTA stop and whether it is wheelchair accessible.
@@ -82,14 +76,16 @@ def find_stop_near(place_name):
     lat_long = get_lat_long(place_name)
     return get_nearest_station(lat_long[0], lat_long[1])
 
-print(find_stop_near(''))
 
 def main():
     """"
     You can test all the functions here
     """
-    pass
-
+    # pprint.pprint(get_json(MAPQUEST_URL))
+    # pprint.pprint(get_json(MBTA_BASE_URL))
+    # print(get_lat_long('VassarSt,Cambridge,MA'))
+    # print(get_nearest_station(42.365248, -71.105015))
+    # print(find_stop_near('HudsonSt,Cambridge,MA'))
 
 if __name__ == '__main__':
     main()
