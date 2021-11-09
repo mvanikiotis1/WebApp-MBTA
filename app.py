@@ -15,14 +15,21 @@ def caclulate():
         fulladdress = f"{street},{city},{state},{zipcode}"
         fulladdress = urllib.parse.quote_plus(fulladdress)
         app.logger.info(fulladdress)
-        if fulladdress: 
-            closestStation = mbta_helper.find_stop_near(fulladdress)
-            return render_template(
-                "result.html",
-                closestStation,
-            )
-        else:
-            return render_template("index.html", error = True)
+        try: 
+            if fulladdress: 
+                closestStation = mbta_helper.find_stop_near(fulladdress)
+                return render_template(
+                    "result.html",
+                    closestStation = closestStation,
+                    street = street, 
+                    city = city, 
+                    state = state,
+                    zipcode = zipcode,
+                )
+            else:
+                return render_template("index.html", error = True)
+        except:
+            return render_template("index.html", error = None)
 
     return render_template("index.html", error = None)
 

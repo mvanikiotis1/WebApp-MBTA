@@ -87,9 +87,10 @@ def main():
     # pprint.pprint(get_json(MBTA_BASE_URL))
     # print(get_lat_long('VassarSt,Cambridge,MA'))
     # print(get_nearest_station(42.365248, -71.105015))
-    print(find_stop_near('HudsonSt,Cambridge,MA'))
+    # print(find_stop_near('HudsonSt,Cambridge,MA'))
     # print(find_stop_near('harvard'))
-    print(find_stop_near('5maphilldrive,wellesleyhills,ma'))
+    # print(find_stop_near('4smarketst,boston,ma'))
+    print(find_stop_near('4+S+Market+St%2Cboston%2Cma%2C02109'))
 
 if __name__ == '__main__':
     main()
