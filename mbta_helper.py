@@ -36,7 +36,6 @@ def get_lat_long(place_name):
     See https://developer.mapquest.com/documentation/geocoding-api/address/get/
     for Mapquest Geocoding  API URL formatting requirements.
     """
-    # MAPQUEST_URL = f'http://www.mapquestapi.com/geocoding/v1/address?key={MAPQUEST_API_KEY}&location={place_name}'
     MAPQUEST_URL = f'http://www.mapquestapi.com/geocoding/v1/address?&key={MAPQUEST_API_KEY}&location={place_name}'
     MAPQUEST_INFO = get_json(MAPQUEST_URL)
     # pprint.pprint(MAPQUEST_INFO)
@@ -57,8 +56,11 @@ def get_nearest_station(latitude, longitude):
     """
     sorted_distance_url = f"https://api-v3.mbta.com/stops?api_key={MBTA_API_KEY}&sort=distance&filter%5Blatitude%5D={latitude}&filter%5Blongitude%5D={longitude}"
     f = urllib.request.urlopen(sorted_distance_url)
+    print(sorted_distance_url)
     response_text = f.read().decode('utf-8')
     response_data = json.loads(response_text)
+    print(latitude, longitude)
+    # print(response_data)
     is_wheelchair = response_data['data'][0]['attributes']['wheelchair_boarding']
     if is_wheelchair == 0:
         wheelchair_accessible = 'No Wheelchair Information'
@@ -85,7 +87,9 @@ def main():
     # pprint.pprint(get_json(MBTA_BASE_URL))
     # print(get_lat_long('VassarSt,Cambridge,MA'))
     # print(get_nearest_station(42.365248, -71.105015))
-    # print(find_stop_near('HudsonSt,Cambridge,MA'))
+    print(find_stop_near('HudsonSt,Cambridge,MA'))
+    # print(find_stop_near('harvard'))
+    print(find_stop_near('5maphilldrive,wellesleyhills,ma'))
 
 if __name__ == '__main__':
     main()
